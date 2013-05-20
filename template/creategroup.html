@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block contmain %}
+
+<div >
+    <form>
+    <fieldset>
+    <legend>Armar un equipo</legend>
+    <label>Grupo</label>
+    <input type="text" placeholder="Mi equipo">
+    <span class="help-block">Seleccione sus intereses</span>
+    <label class="checkbox">
+    <input type="checkbox"> Finanzas
+    </label>
+    <label class="checkbox">
+    <input type="checkbox" disabled="disabled"> Conocimiento
+    </label>
+    <label class="checkbox">
+    <input type="checkbox" disabled="disabled"> Cultura
+    </label>
+
+    <label class="checkbox">
+    <input type="checkbox" disabled="disabled"> Alianzas
+    </label>
+
+    <button type="submit" class="btn">Crear equipo</button>
+    </fieldset>
+    </form>
+</div>
+
+
+{% endblock %}

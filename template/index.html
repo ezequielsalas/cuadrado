@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <title>
+      Cuadrado para ser feliz
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="/static/style/bootstrap.css" rel="stylesheet">
+    <style>
+      body { padding-top: 60px; /* 60px to make the container go all the way
+      to the bottom of the topbar */ }
+    </style>
+    <link href="/static/style/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js">
+      </script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">
+            Cuadrado
+          </a>
+          <!-- aqui-->
+          
+           <form action= '/login/' method = 'post' class="navbar-form pull-right">
+              {% csrf_token %}
+              <input name='usuarioLogin' class="span2" type="text" placeholder="Email">
+              <input name='passwordLogin' class="span2" type="password" placeholder="Password">
+              <button type="submit" class="btn">Sign in</button>
+            </form>
+
+
+          <!-- fin aqui-->
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="span8">
+          <div class="hero-unit">
+            <div>
+              <h1>
+                Maneja tus finanzas, tu vida.
+              </h1>
+              <p>
+                Sin morir en el intento...
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="span4">
+          <form action="/" method="POST">
+			{% csrf_token %}
+            <div class="control-group">
+              <label for="textinput4">
+                
+                  
+                   
+                    {%if msje %}
+                        <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{msje}}
+                        </div>
+                      {%endif%}
+                         {%if msj%}
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          {{msj}}
+                        </div>
+                      
+                    {%endif%}
+                  
+                <h2>
+                  <strong>
+                    Registrate
+                  </strong>
+                </h2>
+                <h3>
+                  Es gratis!
+                </h3>
+                
+              </label>
+              <input name="usuario"  type="search" placeholder="Nombre completo">
+            </div>
+            <div class="control-group">
+              <label for="textinput2">
+              </label>
+              <input name="email"  type="email" placeholder="Email">
+            </div>
+            <div class="control-group">
+              <label for="textinput3">
+              </label>
+              <input name="password"  type="password" placeholder="Password">
+            </div>
+              <button class="btn btn-large btn-primary" type="submit">Registrarse</button>
+            <div class="control-group">
+              <label for="textinput1">
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4">
+          <div class="well">
+            <div>
+              <h2>
+                Ven con tu grupo o&nbsp;familia
+              </h2>
+              <p>
+                Crea un grupo de amigos o familiares que quieran organizarce en el ambito
+                financiero, Cultural, intelectual etc.. declarando los objetivos del grupo.
+             
+                &nbsp;
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="span4">
+          <div class="well">
+            <div>
+              <h2>
+                Monitorea los avances
+              </h2>
+              <p>
+                Cuadrado proporciona un conjunto de graficas y metricas con las cuales
+                podras ver en que estas avanzando y en que necesitas trabajar mas.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="span4">
+          <div class="well">
+            <div>
+              <h2>
+                Comparte con gente como tu
+              </h2>
+              <p>
+                En adicion a los avances que tengas podras compartir y aprender de otros
+                grupos o familia para incrementar las habilidades en determinadas areas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      
+    </style>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+    </script>
+    <script src="/static/js/bootstrap.js">
+    </script>  
+  </body>
+</html>
