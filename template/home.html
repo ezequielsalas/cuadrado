@@ -1,32 +1,48 @@
 {% extends "base.html" %}
 
 {% block contmain %}
-
-	   <div class="hero-unit">
-        <h1>
-            Unirme a grupos!
-        </h1>
-        <p>
-            Aquí podras formar parte de grupos existentes por medio de una solicitud o bien crear uno. Al hacer click en creacion de equipos tendras que completar los datos con las caracteristicas que quieres que tenga tu nuevo equipos.
-        </p>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3">
+      <div class="well sidebar-nav">
         
-        <div class="row ">
-        <div class="span2" style='height:200px;text-align: center;'>
-            <a  class='round' href='/creategroup/'><img src='/static/img/add_group.png' /></a>
-            <p><h6 >Crear un nuevo equipo</h5></p>
-        </div>
-      
+        <ul class="nav nav-list">
+          {% for g in grupos %}
+          <li class="nav-header">{{g.nombre}}</li> 
 
-        <div class="span2" style='height:200px;text-align: center;'>
-            <a  class='round' href='#'><img src='/static/img/search_group.png' /></a>
-            <p ><h6 >Buscar equipo existentes</h6></p>
-        </div>
-        </div>
-    </div>
+          
+          {%if g.interesFinanciero%}
+          <li ><a href="/financialview/?search={{g.nombre}}">Finanzas</a></li>
+          {% endif %}
+
+          {%if g.interesConocimiento%}
+          <li ><a href="#">Conocimiento</a></li>
+          {% endif %}
+
+          {%if g.interesCultura%}
+          <li ><a href="#">Cultura</a></li>
+          {% endif %}
+
+          {%if g.interesAlianza%}
+          <li ><a href="#">Alianzas</a></li>
+          {% endif %}
 
 
-	<br/>
-	<br/>
-    <br />
-    
+
+
+
+          {% endfor %}
+        </ul>
+      </div><!--/.well -->
+    </div><!--/span-->
+    <div class="span9">
+      <div class="hero-unit">
+        <h1>Bienvenido!</h1>
+        <p>Este es el panel central de Cuadrado. Para iniciar, ve al panel de la izquierda y pulsa en algun interes del grupo al cual perteneces o selecciona Iniciar ahora y Cuadrado entrera al interes principal de tu grupo</p>
+        <p><a href="/financialview/" class="btn btn-primary btn-large">Iniciar ahora &raquo;</a></p>
+      </div>
+     
+  
+    </div><!--/span-->
+  </div><!--/row-->
 {% endblock %}

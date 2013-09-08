@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>
-      Cuadrado - Home
+      Cuadrado
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -29,63 +29,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
     <style>
-    </style>
-  </head>
-  <body>
-    
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="#">Cuadrado</a>
-          <div class="nav-collapse collapse">
-
-
-            <ul class="nav">
-              <li class="active"><a class="" href="/home/">Inicio</a></li>
-               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Grupos <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/home/">Unirme a grupos</a></li>
-                  <li><a href="#">Mensajes</a></li>
-                  <li class="divider"></li>
-                  <li class="nav-header">Alianzas</li>
-                  <li><a href="#">Grupo 1</a></li>
-                  <li><a href="#">Grupo 2</a></li>
-                </ul>
-              </li>
-              <li><a href="#contact">Metas</a></li>
-              
-            
-            </ul>
-            <ul class="nav pull-right">
-                <li class="dropdown pull-right">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Hola, soy {{user}}<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-          
-                  <li><a href="#" onclick="alert('Area no autorizada');">Perfil</a></li>
-                  <li class="divider"></li>
-                <li><a href="/logout/">Salir</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    <!-- -->
-    <div id="contBodyHome" class="container jetstrap-selected" style='height:400px;'>
-        
-    {% block contmain %}
-
-    {% endblock %}
-    </div>
-
-    <style>
       
       body {
         padding-top: 60px;
@@ -103,6 +46,70 @@
           padding-right: 5px;
         }
       }
+   
+    </style>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Cuadrado</a>
+          <div class="nav-collapse collapse">
+
+
+            <ul class="nav">
+              <li class="active"><a class="" href="/homeview/">Inicio</a></li>
+               <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Grupos <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/grupos/">Unirme a grupos</a></li>
+                  <li><a href="#">Mensajes</a></li>
+                  <li class="divider"></li>
+                  <li class="nav-header">Alianzas</li>
+                  {% if alianzas%}
+                  <li><a href="#">Grupo 1</a></li>
+                  {% else %}
+                  <li><a href="#">No tienes ninguna alianza</a></li> 
+                  {% endif %}
+                </ul>
+              </li>
+              <li><a href="#contact">Metas</a></li>
+              {% block customenu %}
+
+              {% endblock %}
+            
+            </ul>
+            <ul class="nav pull-right">
+                <li class="dropdown pull-right">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Hola, {{user}}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+          
+                  <li><a href="#" onclick="alert('Area no autorizada');">Perfil</a></li>
+                  <li class="divider"></li>
+                <li><a href="/logout/">Salir</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <!-- 
+    <div id="contBodyHome" class="container-fluid" style='height:400px;'>
+        -->
+    {% block contmain %}
+
+    {% endblock %}
+   <!--    </div>-->
+
+    <style>
+   
       
     </style>
 {%if user%}
@@ -113,11 +120,13 @@
 </script>
 {% endif %}
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+    
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
     </script>
     <script src="/static/js/bootstrap.js">
     </script>
-    
+    <script src="/static/js/logic.js">
+    </script>
     <script>
 
     </script>

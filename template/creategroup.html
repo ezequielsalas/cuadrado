@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 
 {% block contmain %}
-
+  <div id="contBodyHome" class="container">
 <div >
-    <form>
+    <form method='post' action='/creategroup/'>
+        {% csrf_token %}
     <fieldset>
     <legend>Armar un equipo</legend>
     <label>Grupo</label>
-    <input type="text" placeholder="Mi equipo">
+    <input type="text" name='equipoparam' required="" placeholder="Mi equipo">
     <span class="help-block">Seleccione sus intereses</span>
     <label class="checkbox">
-    <input type="checkbox"> Finanzas
+    <input type="checkbox" checked name='finanzaparam' disabled="disabled"> Finanzas
     </label>
     <label class="checkbox">
     <input type="checkbox" disabled="disabled"> Conocimiento
@@ -28,5 +29,5 @@
     </form>
 </div>
 
-
+  </div >
 {% endblock %}

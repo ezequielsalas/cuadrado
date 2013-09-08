@@ -1,0 +1,89 @@
+{% extends "financialInterest.html" %}
+
+
+{% block financialBody %}
+
+ 
+    <fieldset>
+    <legend>Trabajando con <strong>{{currentAccFina}}</strong></legend>
+
+	 <table class="table table-condensed">
+    	{% if trans %}
+    		<tr><th><b>Fecha</b></th><th><b>Concepto</b></th><th><b>Monto</b></th></tr>
+    		{% for t in trans%}
+    		<tr><td>{{t.created}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td></tr>
+    		{% endfor %}
+    	{% else %}
+    	<tr><td><b>Sin transacciones</b></td></tr>
+    	{% endif%}
+    
+    </table>
+
+    </fieldset>
+   
+    
+
+
+{% endblock %}
+
+{% block financialRight %}
+
+<form  method="post" action="/createfinancialTran/">
+     {% csrf_token %}
+
+
+<!-- Form Name 809-439-3421-->
+<legend>Registro de transaccion</legend>
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="conceptoTransaccion">Concepto</label>
+  <div class="controls">
+    <input id="conceptoTransaccion" name="concept" placeholder="Dos taquillas de cine..." required="" class="input-large" type="text">
+    
+  </div>
+</div>
+
+<!-- Prepended text-->
+<div class="control-group">
+  <label class="control-label" for="montoTransaction">Monto</label>
+  <div class="controls">
+    <div class="input-prepend">
+      <span class="add-on">$</span>
+      <input id="montoTransaction" name="amount" class="input-small" placeholder="Eje: 500" required="" type="number" min="0" onkeypress="return isNumberKey(event)">
+    </div>
+    
+  </div>
+</div>
+<input type='hidden' id='transType' name='transTypeParam' />
+<!-- Button (Double) -->
+<div class="control-group">
+  <label class="control-label" for="buttonIngresoid">Tipo</label>
+  <div class="controls">
+    <button id="buttonIngresoid" name="buttonIngresoid" class="btn btn-success" onfocus='isDeposit()'>Ingreso $</button>
+    <button id="buttonGastoid" name="buttonGastoid" class="btn btn-danger" onfocus='isSpending()'>Gasto    $</button>
+  </div>
+</div>
+
+
+</form>
+
+<div class="control-group ">
+ <hr/>
+  <b><label class="control-label" for="conceptoTransaccion">Balance de la cuenta</label></b>
+  <div class="controls">
+  <label class="control-label" >
+   <strong>
+   	$
+  		{% if balance %}
+      		 {{balance}}  
+    	{% else %}
+    		0
+    	{% endif%}
+   </strong>
+    </label>
+    
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block contmain %}
+  <div iclass="container" >
+  
+	   <div class="hero-unit">
+        <h1>
+            Unete a algun grupo!
+        </h1>
+        <p>
+            Aquí podras formar parte de grupos existentes por medio de una solicitud o bien crear uno. Al hacer click en creacion de equipos tendras que completar los datos con las caracteristicas que quieres que tenga tu nuevo equipos.
+        </p>
+        
+        <div class="row ">
+        <div class="span2" style='height:200px;text-align: center;'>
+            <a  class='round' href='/creategroupview/'><img src='/static/img/add_group.png' /></a>
+            <p><h6 >Crear un nuevo equipo</h5></p>
+        </div>
+      
+
+        <div class="span2" style='height:200px;text-align: center;'>
+            <a  class='round' href='/searchgroupview/'><img src='/static/img/search_group.png' /></a>
+            <p ><h6 >Buscar equipo existentes</h6></p>
+        </div>
+        </div>
+    </div>
+
+
+	
+    
+    </div>  
+{% endblock %}
