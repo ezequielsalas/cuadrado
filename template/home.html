@@ -8,28 +8,24 @@
         
         <ul class="nav nav-list">
           {% for g in grupos %}
-          <li class="nav-header">{{g.nombre}}</li> 
+          <li class="nav-header">{{g.equipo.nombre}}</li> 
 
           
-          {%if g.interesFinanciero%}
-          <li ><a href="/financialview/?search={{g.nombre}}">Finanzas</a></li>
+          {%if g.equipo.interesFinanciero%}
+          <li ><a href="/financialview/?search={{g.equipo.nombre}}">Finanzas</a></li>
           {% endif %}
 
-          {%if g.interesConocimiento%}
+          {%if g.equipo.interesConocimiento%}
           <li ><a href="#">Conocimiento</a></li>
           {% endif %}
 
-          {%if g.interesCultura%}
+          {%if g.equipo.interesCultura%}
           <li ><a href="#">Cultura</a></li>
           {% endif %}
 
-          {%if g.interesAlianza%}
+          {%if g.equipo.interesAlianza%}
           <li ><a href="#">Alianzas</a></li>
           {% endif %}
-
-
-
-
 
           {% endfor %}
         </ul>
@@ -38,8 +34,8 @@
     <div class="span9">
       <div class="hero-unit">
         <h1>Bienvenido!</h1>
-        <p>Este es el panel central de Cuadrado. Para iniciar, ve al panel de la izquierda y pulsa en algun interes del grupo al cual perteneces o selecciona Iniciar ahora y Cuadrado entrera al interes principal de tu grupo</p>
-        <p><a href="/financialview/" class="btn btn-primary btn-large">Iniciar ahora &raquo;</a></p>
+        <p>Este es el panel central de Dhene. Para iniciar, ve al panel de la izquierda y pulsa en algun interes del grupo al cual perteneces o selecciona Iniciar ahora y Dhene entrera al interes principal de tu grupo</p>
+        <p><a href="/financialview/?search={{grupos.0.equipo.nombre}}" class="btn btn-primary btn-large">Iniciar ahora &raquo;</a></p>
       </div>
      
   

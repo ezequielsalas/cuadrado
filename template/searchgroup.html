@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block customenu %}
-   <form class="navbar-search pull-left">
-    <input id='serchGroupField' type="text" class="search-query" data-provide="typeahead" placeholder="Ejemplo: Familia Perez">
+   <form class="navbar-search pull-left" action='/searchgroup/'>
+    <input id='serchGroupField' autocomplete="off" name="searchGroup" type="text" class="search-query" data-provide="typeahead" placeholder="Ejemplo: Familia Perez">
      <button type="submit" class="btn">Buscar</button>
     </form>
     
@@ -12,12 +12,26 @@
   <div id="contBodyHome" class="container">
  <table class="table table-condensed">
     	{% if teams %}
-    		<tr><th><b>Nombre</b></th><th><b>Propietario</b></th><th><b>Accion</b></th></tr>
-    		{% for t in teams%}
-    		<tr><td>{{t.nombre}}</td><td>{{t.propietario}}</td><td><a href='#'>Solicitar alianza</a></td></tr>
+    		<tr><th><b>Nombre</b></th><th><b>Fundador</b></th><th><b>Accion</b></th></tr>
+	    		{% for t in teams%}
+	    		<tr><td>{{t.equipo.nombre}}</td><td>{{t.equipo.propietario}}</td>
+	    		
+	    		{% if t.estado == 'Aliado' %}
+	    			<td><a href='#'>Ya eres aliado</a></td>
+	    		
+	    		{% elif t.estado == 'Pendiente' %}
+	    			<td><a href='#'>Esperando una respuesta</a></td>
+	    		{% else %}	
+	    			<td><a href='/requestalliance/?requestGroup={{t.equipo.nombre}}&alliance={{t.id}}'>Solicitar alianza</a></td>
+	    		{% endif %}
+	    		
+    		
+    		</tr>
+    	
+    	
     		{% endfor %}
     	{% else %}
-    	<tr><td><b>Sin Resultados</b></td></tr>
+    	<tr><td></td></tr>
     	{% endif%}
     
     </table>

@@ -26,11 +26,9 @@ class Alianza(models.Model):
 	cuenta = models.ForeignKey(Cuenta, related_name='Cuenta')
 	equipo = models.ForeignKey(Equipo, related_name='Equipo')
 	creado = models.DateField(auto_now=True)
-
-
-
-
-
+	#Aliado Rota Pendiente
+	estado = models.CharField(max_length=200,blank=True, null=True)
+	
 class Category(models.Model):
 	name = models.CharField(max_length=200)
 	

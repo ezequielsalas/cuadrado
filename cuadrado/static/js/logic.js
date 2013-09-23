@@ -2,15 +2,25 @@ function showAccFinanForm(){
 
 	
 }
+/*
+function (query, process) {
+    return $.get('/typeaheadGroup/', { query: query }, function (data) {
+        return process(data.options);
+    });
+}
+*/
 function loadSearchGroupNames(){
 	var colors = ["red", "blue", "green", "yellow", "brown", "black"];
-	  $('#serchGroupField').typeahead({
-		    source: function (query, process) {
-		        return $.get('/typeaheadGroup/', { query: query }, function (data) {
-		            return process(data.options);
-		        });
-		    }
-		});
+	
+	$.get('/typeaheadGroup/', {}, function (data) {
+       
+		available = data.split(',');
+		
+		$('#serchGroupField').typeahead({
+			  source:available
+			});
+    });
+	  
 }
 
 $(document).ready(function() {
