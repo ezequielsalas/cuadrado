@@ -34,7 +34,7 @@ class Category(models.Model):
 	
 class FinancialAcc(models.Model):
 	balance = models.FloatField(blank=True, null=True)
-	name = models.CharField(max_length=200, unique=True)
+	name = models.CharField(max_length=200)
 	created = models.DateField(auto_now=True)
 #	transaction = models.ForeignKey(Transaction, related_name='Transaction',blank=True, null=True)
 	porcent = models.IntegerField(max_length=200,blank=True, null=True)
