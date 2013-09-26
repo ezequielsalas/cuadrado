@@ -13,18 +13,18 @@ def validateSignin(usuario, email, password):
 	return result 
 
 def getLogin(request):
-	if not 'account' in request:
+	if 'account' not in request.session:
 		return ''
 	
 	return 	request.session['account'].usuario
 
 def getCurrentAccount(request):
-	if not 'account' in request:
+	if 'account' not in request.session:
 		return ''	
 	return request.session['account']	
 
 def isLoged(request):
-	if not 'account' in request.session:
+	if 'account' not in request.session:
 		return HttpResponseRedirect('/')	
 	return True	
 
