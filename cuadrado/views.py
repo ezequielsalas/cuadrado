@@ -193,6 +193,7 @@ def createFinancialAcc(request):
 	accFinaName = ''
 	trxs = ''
 	balance = 0.0
+	msj = ''
 	if request.method == 'POST':
 		faf = FinancialAccForm(request.POST)
      	faftname = request.POST.get('name','')
@@ -213,9 +214,9 @@ def createFinancialAcc(request):
 	     		saveInSession(request, 'currentAccFina', faft)
 	
 		else:	
-			return render(request,'financialInterest.html',{'user':getLogin(request),'accFina':team.financialacc_set.all()})
+			msj = 'Esta cuenta ya existe en este grupo.'
 	     
-	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
+	return render(request,'financialAcctnx.html',{'msj':msj,'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
 
 def financialAccByName(request):
 	isLoged(request)
