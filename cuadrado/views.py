@@ -185,7 +185,7 @@ def creategroup(request):
 	alianza = Alianza(equipo=equipo,cuenta=cuenta)
 	alianza.save()
 	
-	return render(request,'creategroup.html',{'user':getLogin(request)})
+	return HttpResponseRedirect('/homeview/')
 
 def createFinancialAcc(request):
 	isLoged(request)
