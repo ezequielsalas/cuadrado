@@ -24,7 +24,7 @@ def getCurrentAccount(request):
 	return request.session['account']	
 
 def isLoged(request):
-	if not 'account' in request:
+	if not 'account' in request.session:
 		return HttpResponseRedirect('/')	
 	return True	
 
