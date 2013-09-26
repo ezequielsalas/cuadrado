@@ -194,6 +194,7 @@ def createFinancialAcc(request):
 	trxs = ''
 	balance = 0.0
 	msj = ''
+	page = 'financialAcctnx.html'
 	if request.method == 'POST':
 		faf = FinancialAccForm(request.POST)
      	faftname = request.POST.get('name','')
@@ -215,8 +216,8 @@ def createFinancialAcc(request):
 	
 		else:	
 			msj = 'Esta cuenta ya existe en este grupo.'
-	     
-	return render(request,'financialAcctnx.html',{'msj':msj,'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
+	     	page = 'financialInterest.html'
+	return render(request,page,{'msj':msj,'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
 
 def financialAccByName(request):
 	isLoged(request)
