@@ -13,16 +13,20 @@ def validateSignin(usuario, email, password):
 	return result 
 
 def getLogin(request):
-	
 	if not 'account' in request:
-		return HttpResponseRedirect('/')
+		return ''
 	
 	return 	request.session['account'].usuario
 
 def getCurrentAccount(request):
 	if not 'account' in request:
-		return HttpResponseRedirect('/')
+		return ''	
 	return request.session['account']	
+
+def isLoged(request):
+	if not 'account' in request:
+		return HttpResponseRedirect('/')	
+	return True	
 
 def saveInSession(request,name,value):
 	try:
@@ -71,15 +75,18 @@ def login(request):
 		return render(request,'index.html',{'msje':msje})
 
 def viewhome(request):
+	isLoged(request)
 	acc = getCurrentAccount(request)
 	grupos = Alianza.objects.filter(cuenta__usuario=acc.usuario).filter(Q(estado__isnull=True)|Q(estado='Aliado'))
 	return render(request,'home.html',{'user':getLogin(request),'grupos':grupos})
 
 def viewcreategroup(request):
+	isLoged(request)
 	return render(request,'creategroup.html',{'user':getLogin(request)})
 
 def viewfinancialinterest(request):
 	#TODO: restriction for get only the account in my team
+	isLoged(request)
 	teamName = request.GET.get('search','')
 	if not teamName:
 		return HttpResponseRedirect('/homeview/')
@@ -93,12 +100,15 @@ def viewfinancialinterest(request):
 
 
 def grupo(request):
+	isLoged(request)
 	return render(request,'grupos.html',{'user':getLogin(request)})
 
 def viewsearchgroup(request):
+	isLoged(request)
 	return render(request,'searchgroup.html',{'user':getLogin(request)})
 
 def searchgroup(request):
+	isLoged(request)
 	teamName = request.GET.get('searchGroup','')
 	user = getLogin(request)
 	
@@ -116,6 +126,7 @@ def searchgroup(request):
 
 #Cambiar esto de get a post
 def requestAlliance(request):
+	isLoged(request)
 	teamName = request.GET.get('requestGroup','')
 	alliance = request.GET.get('alliance','')
 	
@@ -140,6 +151,7 @@ def requestAlliance(request):
 	return render(request,'searchgroup.html',{'user':getLogin(request),'teams':currentTeams})
 
 def getMeGroupMessage(request):
+	isLoged(request)
 	teams = Alianza.objects.filter(equipo__propietario=getLogin(request), estado = 'Pendiente')
 	result = ''
 	
@@ -148,6 +160,7 @@ def getMeGroupMessage(request):
 	return HttpResponse(result)
 
 def serchNameGroup(request):
+	isLoged(request)
 	result = ''
 	data = Equipo.objects.values('nombre').distinct()
 	for v in data:
@@ -162,6 +175,7 @@ def logout(request):
 	return render(request, "index.html")
 
 def creategroup(request):
+	isLoged(request)
 	nombregrupo = request.POST.get('equipoparam')
 	interesfinanciero = request.POST.get('finanzaparam','True')
 	cuenta = getCurrentAccount(request)
@@ -174,6 +188,7 @@ def creategroup(request):
 	return render(request,'creategroup.html',{'user':getLogin(request)})
 
 def createFinancialAcc(request):
+	isLoged(request)
 	accFina = ''
 	accFinaName = ''
 	trxs = ''
@@ -203,6 +218,7 @@ def createFinancialAcc(request):
 	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
 
 def financialAccByName(request):
+	isLoged(request)
 	team = getSavedInSession(request, 'team')
 	accFina = team.financialacc_set.all()
 	
@@ -221,6 +237,7 @@ def financialAccByName(request):
 	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':currentAccFinaName,'trans':trxs,'balance':balance})
 
 def createFinancialTranx(request):
+	isLoged(request)
 	acc = getCurrentAccount(request)
 	currentAccFina = getSavedInSession(request, 'currentAccFina')
 	team = getSavedInSession(request, 'team')
@@ -247,6 +264,7 @@ def createFinancialTranx(request):
 	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':currentAccFina.name,'trans':trxs,'balance':balance})
 
 def processAllianceRequest(request):
+	isLoged(request)
 	action = request.GET.get('msjParam','')
 	groupParam = request.GET.get('groupParam','')
 	print 'en el metodo probando'
