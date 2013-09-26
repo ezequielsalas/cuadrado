@@ -185,23 +185,18 @@ def createFinancialAcc(request):
 		faf = FinancialAccForm(request.POST)
      	faftname = request.POST.get('name','')
      	team = getSavedInSession(request, 'team')
-     	exist = team.financialacc_set.filter(nombre = faftname)
+     	exist = team.financialacc_set.filter(name = faftname)
      	if not exist:
-	     	if faf.is_valid():
-	     		faftname = faf.name
-	     		team = getSavedInSession(request, 'team')
-	     		exist = team.financialacc_set.filter(name = faftname)
-	     		if not exist:
-		     		faft = faf.save(commit = False)
-		     		acc = getCurrentAccount(request)
-		     		
-		     		grupo = acc.equipo_set.filter(nombre = team.nombre)
-		     		accFinaName = faft.name
-		     		faft.teamowner = grupo[0]
-		     		faft.save()
-		     		accFina = team.financialacc_set.all()
-		     		saveInSession(request, 'currentAccFina', faft)
-		
+     		faft = faf.save(commit = False)
+     		acc = getCurrentAccount(request)
+     		
+     		grupo = acc.equipo_set.filter(nombre = team.nombre)
+     		accFinaName = faft.name
+     		faft.teamowner = grupo[0]
+     		faft.save()
+     		accFina = team.financialacc_set.all()
+     		saveInSession(request, 'currentAccFina', faft)
+
 	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
 
 def financialAccByName(request):
