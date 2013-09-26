@@ -194,7 +194,7 @@ def createFinancialAcc(request):
 	trxs = ''
 	balance = 0.0
 	msj = ''
-	page = 'financialAcctnx.html'
+	page = 'financialInterest.html'
 	if request.method == 'POST':
 		faf = FinancialAccForm(request.POST)
      	faftname = request.POST.get('name','')
