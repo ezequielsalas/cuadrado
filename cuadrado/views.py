@@ -199,7 +199,7 @@ def createFinancialAcc(request):
      	faftname = request.POST.get('name','')
      	team = getSavedInSession(request, 'team')
      	exist = team.financialacc_set.filter(name = faftname)
-     	
+     	accFina = team.financialacc_set.all()
      	if not exist:
 	     	if faf.is_valid():
      	
@@ -210,7 +210,7 @@ def createFinancialAcc(request):
 	     		accFinaName = faft.name
 	     		faft.teamowner = grupo[0]
 	     		faft.save()
-	     		accFina = team.financialacc_set.all()
+	     		
 	     		saveInSession(request, 'currentAccFina', faft)
 	
 		else:	
