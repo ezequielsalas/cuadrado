@@ -17,6 +17,7 @@ def getLogin(request):
 		request.session['account']
 	except NameError, KeyError:
 		request.session['account'] = ''
+		return HttpResponseRedirect('/')
 	
 	return 	request.session['account'].usuario
 
@@ -25,6 +26,7 @@ def getCurrentAccount(request):
 		request.session['account']
 	except NameError, KeyError:
 		request.session['account'] = ''
+		return HttpResponseRedirect('/')
 
 	return request.session['account']	
 
@@ -174,6 +176,7 @@ def creategroup(request):
 	equipo.save()
 	alianza = Alianza(equipo=equipo,cuenta=cuenta)
 	alianza.save()
+	viewhome(request)
 	return render(request,'creategroup.html',{'user':getLogin(request)})
 
 def createFinancialAcc(request):
@@ -186,17 +189,23 @@ def createFinancialAcc(request):
      	faftname = request.POST.get('name','')
      	team = getSavedInSession(request, 'team')
      	exist = team.financialacc_set.filter(name = faftname)
+     	
      	if not exist:
-     		faft = faf.save(commit = False)
-     		acc = getCurrentAccount(request)
-     		
-     		grupo = acc.equipo_set.filter(nombre = team.nombre)
-     		accFinaName = faft.name
-     		faft.teamowner = grupo[0]
-     		faft.save()
-     		accFina = team.financialacc_set.all()
-     		saveInSession(request, 'currentAccFina', faft)
-
+	     	if faf.is_valid():
+     	
+	     		faft = faf.save(commit = False)
+	     		acc = getCurrentAccount(request)
+	     		
+	     		grupo = acc.equipo_set.filter(nombre = team.nombre)
+	     		accFinaName = faft.name
+	     		faft.teamowner = grupo[0]
+	     		faft.save()
+	     		accFina = team.financialacc_set.all()
+	     		saveInSession(request, 'currentAccFina', faft)
+	
+		else:	
+			return render(request,'financialInterest.html',{'user':getLogin(request),'accFina':team.financialacc_set.all()})
+	     
 	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':accFinaName,'trans':trxs,'balance':balance}) 
 
 def financialAccByName(request):
