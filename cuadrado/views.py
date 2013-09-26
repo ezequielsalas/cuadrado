@@ -190,7 +190,7 @@ def createFinancialAcc(request):
 	     	if faf.is_valid():
 	     		faftname = faf.name
 	     		team = getSavedInSession(request, 'team')
-	     		exist = team.financialacc_set.filter(nombre = faftname)
+	     		exist = team.financialacc_set.filter(name = faftname)
 	     		if not exist:
 		     		faft = faf.save(commit = False)
 		     		acc = getCurrentAccount(request)
