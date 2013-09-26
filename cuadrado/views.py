@@ -13,21 +13,15 @@ def validateSignin(usuario, email, password):
 	return result 
 
 def getLogin(request):
-	try:
-		request.session['account']
-	except NameError, KeyError:
-		request.session['account'] = ''
+	
+	if not 'account' in request:
 		return HttpResponseRedirect('/')
 	
 	return 	request.session['account'].usuario
 
 def getCurrentAccount(request):
-	try:
-		request.session['account']
-	except NameError, KeyError:
-		request.session['account'] = ''
+	if not 'account' in request:
 		return HttpResponseRedirect('/')
-
 	return request.session['account']	
 
 def saveInSession(request,name,value):
@@ -176,7 +170,7 @@ def creategroup(request):
 	equipo.save()
 	alianza = Alianza(equipo=equipo,cuenta=cuenta)
 	alianza.save()
-	viewhome(request)
+	
 	return render(request,'creategroup.html',{'user':getLogin(request)})
 
 def createFinancialAcc(request):
