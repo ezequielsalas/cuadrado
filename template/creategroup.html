@@ -3,6 +3,14 @@
 {% block contmain %}
   <div id="contBodyHome" class="container">
 <div >
+ {%if msj %}
+                        <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{msj}}
+                        </div>
+                      {%endif%}
+                        
+
     <form method='post' action='/creategroup/'>
         {% csrf_token %}
     <fieldset>

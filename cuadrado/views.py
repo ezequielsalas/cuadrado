@@ -50,11 +50,14 @@ def index(request):
 		pemail = request.POST.get('email', '')
 		ppassword = request.POST.get('password', '')
 		if validateSignin(pusuario,pemail,ppassword):
-			reg = Cuenta(usuario=pusuario, email=pemail, password=ppassword)
+			reg = Cuenta(usuario=pusuario.strip(), email=pemail.strip(), password=ppassword)
 			reg.save()
 			msj = 'Gracias por registrarte. Ya puedes acceder a tu cuenta!'
 		else:
 			msje = 'Datos incorrectos'
+	
+	#if isLoged(request):
+	#	return HttpResponseRedirect('/homeview/')
 	
 	return render(request,'index.html',{'msj':msj, 'msje':msje})
 
@@ -62,7 +65,7 @@ def login(request):
 	pusuario = request.POST.get('usuarioLogin', '')
 	ppassword = request.POST.get('passwordLogin', '')
 	msje = 'Verifica tu password y usuario'
-	cuenta = Cuenta.objects.filter(email= pusuario, password=ppassword)
+	cuenta = Cuenta.objects.filter(email= pusuario.strip(), password=ppassword)
 	if cuenta:
 		request.session['account'] = cuenta[0]
 		grupos = Alianza.objects.filter(cuenta__usuario=cuenta[0].usuario).filter(Q(estado__isnull=True)|Q(estado='Aliado'))
@@ -76,12 +79,12 @@ def login(request):
 
 def viewhome(request):
 	isLoged(request)
-	acc = getCurrentAccount(request)
-	grupos = Alianza.objects.filter(cuenta__usuario=acc.usuario).filter(Q(estado__isnull=True)|Q(estado='Aliado'))
+	grupos = Alianza.objects.filter(cuenta__usuario=getLogin(request)).filter(Q(estado__isnull=True)|Q(estado='Aliado'))
 	return render(request,'home.html',{'user':getLogin(request),'grupos':grupos})
 
 def viewcreategroup(request):
 	isLoged(request)
+	print 'paso el isLoged'
 	return render(request,'creategroup.html',{'user':getLogin(request)})
 
 def viewfinancialinterest(request):
@@ -112,7 +115,7 @@ def searchgroup(request):
 	teamName = request.GET.get('searchGroup','')
 	user = getLogin(request)
 	
-	teams = Alianza.objects.filter(equipo__nombre__icontains=teamName,estado__isnull=True).exclude(equipo__propietario=user)
+	teams = Alianza.objects.filter(equipo__nombre__icontains=teamName.strip(),estado__isnull=True).exclude(equipo__propietario=user)
 	
 	currentTeams = []
 	for team in teams:
@@ -131,10 +134,10 @@ def requestAlliance(request):
 	alliance = request.GET.get('alliance','')
 	
 	cuenta = getCurrentAccount(request)
-	equipo = Equipo.objects.get(nombre=teamName)
+	equipo = Equipo.objects.get(nombre=teamName.strip())
 	
 	if equipo:
-		t = Alianza.objects.filter(equipo__nombre=teamName,cuenta__usuario=cuenta.usuario)
+		t = Alianza.objects.filter(equipo__nombre=teamName.strip(),cuenta__usuario=cuenta.usuario)
 		if not t:
 			ali = Alianza(equipo=equipo,cuenta=cuenta,estado='Pendiente')	
 			ali.save()
@@ -179,13 +182,20 @@ def creategroup(request):
 	nombregrupo = request.POST.get('equipoparam')
 	interesfinanciero = request.POST.get('finanzaparam','True')
 	cuenta = getCurrentAccount(request)
-	equipo = Equipo(nombre=nombregrupo,interesFinanciero=interesfinanciero,propietario=cuenta.usuario)
+	msj = ''
+	if cuenta:
+		
+		if not Equipo.objects.filter(nombre=nombregrupo.strip()):
+			equipo = Equipo(nombre=nombregrupo.strip(),interesFinanciero=interesfinanciero.strip(),propietario=cuenta.usuario)
+		
+			equipo.save()
+			alianza = Alianza(equipo=equipo,cuenta=cuenta)
+			alianza.save()
+			return HttpResponseRedirect('/homeview/')
+		else:
+			msj = 'Ya existe este equipo.'
 
-	equipo.save()
-	alianza = Alianza(equipo=equipo,cuenta=cuenta)
-	alianza.save()
-	
-	return HttpResponseRedirect('/homeview/')
+	return render(request,'creategroup.html',{'user':getLogin(request),'msj':msj})
 
 def createFinancialAcc(request):
 	isLoged(request)
@@ -229,7 +239,7 @@ def financialAccByName(request):
 		return HttpResponseRedirect('/homeview/')
 	
 	for acc in accFina:
-		if acc.name == currentAccFinaName:
+		if acc.name == currentAccFinaName.strip():
 			saveInSession(request, 'currentAccFina', acc)
 	currentAccFina = getSavedInSession(request, 'currentAccFina')		
 	trxs = 	currentAccFina.transaction_set.all()
@@ -269,14 +279,10 @@ def processAllianceRequest(request):
 	isLoged(request)
 	action = request.GET.get('msjParam','')
 	groupParam = request.GET.get('groupParam','')
-	print 'en el metodo probando'
-	a = Alianza.objects.get(equipo__nombre=groupParam,estado='Pendiente')
-	print a
-	print action
+	a = Alianza.objects.get(equipo__nombre=groupParam.strip(),estado='Pendiente')
 	if action =='Accept':
 		a.estado = 'Aliado'
 	elif action == 'Rejected':
 		a.estado = 'Rota'
-	print a	
 	a.save()
 	return HttpResponse('/')
