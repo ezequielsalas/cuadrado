@@ -107,7 +107,12 @@
             <div class="control-group">
               <label for="textinput3">
               </label>
-              <input name="password"  type="password" placeholder="Password">
+              <input name="password"  onkeyup="showFieldIfFill(this,'repasswordContent');"  type="password" placeholder="Password">
+            </div>
+            <div class="control-group" id="repasswordContent" >
+              <label for="textinput3">
+              </label>
+              <input name="repassword" id="repassword" type="password" placeholder="Password otra vez">
             </div>
               <button class="btn btn-large btn-primary" type="submit">Registrarse</button>
             <div class="control-group">
@@ -169,5 +174,11 @@
     </script>
     <script src="/static/js/bootstrap.js">
     </script>  
+        <script src="/static/js/logic.js">
+        
+    </script>
+    <script>
+    $("#repasswordContent").hide();
+    </script>
   </body>
 </html>

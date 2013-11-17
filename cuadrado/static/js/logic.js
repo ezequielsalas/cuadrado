@@ -70,3 +70,13 @@ function isSpending(){
 function isDeposit(){
 	$('#transType').val("isDeposit");
 }
+function showFieldIfFill(trigger,target){
+	if($(trigger).val()!=""){
+		
+		$("#"+target).show();
+		
+	}else{
+	
+		$("#"+target).hide();
+	}
+}

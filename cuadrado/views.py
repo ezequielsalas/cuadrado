@@ -4,10 +4,11 @@ from forms import CuentaForm,FinancialAccForm,TransactionForm
 from models import Cuenta,Equipo,Alianza,FinancialAcc,Transaction
 from django.core import serializers
 from django.db.models import Q
+from django.db import IntegrityError
 # Create your views here.
-def validateSignin(usuario, email, password):
+def validateSignin(usuario, email, password,repassword):
 	result = True
-	if usuario =='' or email =='' or password =='':
+	if usuario =='' or email =='' or password =='' or password !=repassword:
 		result = False
 
 	return result 
@@ -49,10 +50,15 @@ def index(request):
 		pusuario = request.POST.get('usuario', '')
 		pemail = request.POST.get('email', '')
 		ppassword = request.POST.get('password', '')
-		if validateSignin(pusuario,pemail,ppassword):
+		prepassword = request.POST.get('repassword', '')
+		if validateSignin(pusuario,pemail,ppassword,prepassword):
 			reg = Cuenta(usuario=pusuario.strip(), email=pemail.strip(), password=ppassword)
-			reg.save()
-			msj = 'Gracias por registrarte. Ya puedes acceder a tu cuenta!'
+			try:
+				reg.save()
+				msj = 'Gracias por registrarte. Ya puedes acceder a tu cuenta!'
+			except (NameError,IntegrityError):
+				msje = 'Usuario no disponible'
+			 
 		else:
 			msje = 'Datos incorrectos'
 	
@@ -160,6 +166,7 @@ def getMeGroupMessage(request):
 	
 	for v in teams:
 		result = result + ""+ v.cuenta.usuario+" quiere formar parte de <span>"+v.equipo.nombre+"</span>,"
+	
 	return HttpResponse(result)
 
 def serchNameGroup(request):
@@ -280,6 +287,7 @@ def processAllianceRequest(request):
 	action = request.GET.get('msjParam','')
 	groupParam = request.GET.get('groupParam','')
 	a = Alianza.objects.get(equipo__nombre=groupParam.strip(),estado='Pendiente')
+	print 'la accion', action
 	if action =='Accept':
 		a.estado = 'Aliado'
 	elif action == 'Rejected':

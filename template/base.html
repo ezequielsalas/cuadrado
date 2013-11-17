@@ -60,7 +60,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">Dhene</a>
+          <a class="brand" href="/homeview/">Dhene</a>
           <div class="nav-collapse collapse">
 
 
@@ -80,7 +80,7 @@
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="#contact">Metas</a></li>
+             
               {% block customenu %}
 
               {% endblock %}
@@ -158,7 +158,7 @@
 		$(param).remove();
 	}else{
 		action = 'Rejected'
-		equip  = $(param).prev().prev().text();
+		equip  = $(param).prev().prev().prev().text();
 		$(param).prev().remove();
 		$(param).prev().remove();
 		$(param).remove();
@@ -176,7 +176,7 @@
     	$.get('/getMeGroupMessage/', {}, function (data) {
 		
 		available = data.split(',');
-		
+		if(data!=""){
 		$.each(available, function(index, value) {
 			if(value !=""){
 			//$('#groupMessage').html("");
@@ -184,6 +184,9 @@
 			$('#groupMessage').append("<p> </br>"+value+"<a href='#' style='margin-left:10px;' onclick='procedAllianceRequest(this);'>Aceptar</a> <b> O </b><a href='#' onclick='procedAllianceRequest(this);'>Rechazar</a></p>");
 			}
 		});
+		}else{
+			$('#groupMessage').text("No hay solicitudes");
+		}
     });
     
     })
