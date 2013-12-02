@@ -21,8 +21,11 @@ urlpatterns = patterns('',
     url(r'^createfinancialAcc/', 'cuadrado.views.createFinancialAcc'),
     url(r'^createfinancialTran/', 'cuadrado.views.createFinancialTranx'),
     url(r'^homefinancialTrans/', 'cuadrado.views.financialAccByName'),
+    url(r'^budgetfinancialTrans/', 'cuadrado.views.budgetByFinantialAcc'),
     url(r'^getMeGroupMessage/', 'cuadrado.views.getMeGroupMessage'),
     url(r'^procedAllianceRequest/', 'cuadrado.views.processAllianceRequest'),
+    url(r'^budgetview/', 'cuadrado.views.viewBudget'),
+    url(r'^createfinancialTranBudget/', 'cuadrado.views.createBudgetTranx'),
     # url(r'^cuadradoprj/', include('cuadradoprj.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

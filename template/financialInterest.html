@@ -20,7 +20,7 @@
 <div class="container-fluid">
 	<div class="row-fluid">
 		
-		<div class="span2">
+		<div class="span3">
 
 			<div class="well sidebar-nav">
 				<ul class="nav nav-list">
@@ -30,7 +30,12 @@
 				{% if accFina %}
 					{%for acc in accFina%}
 					<li>
-						<a href="/homefinancialTrans/?search={{acc.name}}" >{{acc.name}}</a>
+						<a href="/homefinancialTrans/?search={{acc.name}}" ><i class='icon-edit'></i>{{acc.name}}</a> 
+						<ul>
+							<li>
+								<a href='/budgetfinancialTrans/?search={{acc.name}}' ><i class="icon-book"></i> Presupuesto</a>
+							</li>
+						</ul>
 					</li>
 						{% endfor %}
 				{% else %}	
@@ -39,7 +44,7 @@
 					</li>
 				{% endif %}	
 					<li>
-						<a href="#myModal"   id='showAccFinForm' data-original-title="Cuenta">:: Agregar cuenta</a>
+						<a href="#myModal"   id='showAccFinForm' data-original-title="Cuenta"><i class='icon-cog'></i>Agregar cuenta</a>
 					</li>
 					
 				</ul>
@@ -120,7 +125,7 @@
 
 		</div>
 
-<div class="span7">
+<div class="span6">
 			{% block financialBody%}
 				
 				

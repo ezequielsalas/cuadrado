@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="span4">
-          <form action="/" method="POST">
+          <form action="/" method="POST" autocomplete="off">
 			{% csrf_token %}
             <div class="control-group">
               <label for="textinput4">
@@ -107,12 +107,12 @@
             <div class="control-group">
               <label for="textinput3">
               </label>
-              <input name="password"  onkeyup="showFieldIfFill(this,'repasswordContent');"  type="password" placeholder="Password">
+              <input name="password" autocomplete="off"  onkeyup="showFieldIfFill(this,'repasswordContent');"  type="password" placeholder="Password">
             </div>
             <div class="control-group" id="repasswordContent" >
               <label for="textinput3">
               </label>
-              <input name="repassword" id="repassword" type="password" placeholder="Password otra vez">
+              <input name="repassword" autocomplete="off" id="repassword" type="password" placeholder="Password otra vez">
             </div>
               <button class="btn btn-large btn-primary" type="submit">Registrarse</button>
             <div class="control-group">
@@ -180,5 +180,11 @@
     <script>
     $("#repasswordContent").hide();
     </script>
+    
+	{%if user%}
+		<script type="text/javascript">
+		  window.location = "/homeview/"
+		</script>
+	{% endif %}
   </body>
 </html>

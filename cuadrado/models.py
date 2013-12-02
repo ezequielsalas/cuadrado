@@ -31,6 +31,21 @@ class Alianza(models.Model):
 	
 class Category(models.Model):
 	name = models.CharField(max_length=200)
+
+class Budget(models.Model):
+	balance = models.FloatField(blank=True, null=True)
+	name = models.CharField(max_length=200)
+	created = models.DateField(auto_now=True)
+	accOwner = models.ForeignKey('FinancialAcc',blank=True, null=True)
+	#Activo Inactivo
+	state = models.CharField(max_length=200,blank=True, null=True)
+#	effectiveDate = models.DateField()
+#	transaction = models.ForeignKey(Transaction, related_name='Transaction',blank=True, null=True)
+	porcent = models.IntegerField(max_length=200,blank=True, null=True)
+	fee = models.IntegerField(max_length=200,blank=True, null=True)
+	def __unicode__(self):
+		return self.name 
+
 	
 class FinancialAcc(models.Model):
 	balance = models.FloatField(blank=True, null=True)
@@ -40,6 +55,7 @@ class FinancialAcc(models.Model):
 	porcent = models.IntegerField(max_length=200,blank=True, null=True)
 	fee = models.IntegerField(max_length=200,blank=True, null=True)
 	teamowner = models.ForeignKey(Equipo,blank=True, null=True)
+	hasBudget = models.BooleanField(default=False)
 	def __unicode__(self):
 		return self.name 
 	
@@ -52,3 +68,14 @@ class Transaction(models.Model):
 	
 	def __unicode__(self):
 		return self.concept
+
+class TransactionBudget(models.Model):
+	created = models.DateField(auto_now=True)
+	amount =  models.FloatField()
+	concept = models.CharField(max_length=200)
+	creator = models.ForeignKey(Cuenta,blank=True, null=True)
+	budgetTrans = models.ForeignKey(Budget,blank=True, null=True)
+	effectiveDate = models.DateField()
+	#TODO: status attribute
+	def __unicode__(self):
+		return self.concept	

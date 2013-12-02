@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse ,HttpResponseRedirect
-from forms import CuentaForm,FinancialAccForm,TransactionForm
-from models import Cuenta,Equipo,Alianza,FinancialAcc,Transaction
+from forms import CuentaForm,FinancialAccForm,TransactionForm, TransactionBudgetForm
+from models import Cuenta,Equipo,Alianza,FinancialAcc,Transaction , Budget
 from django.core import serializers
 from django.db.models import Q
 from django.db import IntegrityError
@@ -65,7 +65,7 @@ def index(request):
 	#if isLoged(request):
 	#	return HttpResponseRedirect('/homeview/')
 	
-	return render(request,'index.html',{'msj':msj, 'msje':msje})
+	return render(request,'index.html',{'msj':msj, 'msje':msje,'user':getLogin(request)})
 
 def login(request):
 	pusuario = request.POST.get('usuarioLogin', '')
@@ -227,8 +227,11 @@ def createFinancialAcc(request):
 	     		grupo = acc.equipo_set.filter(nombre = team.nombre)
 	     		accFinaName = faft.name
 	     		faft.teamowner = grupo[0]
-	     		faft.save()
 	     		
+	     		faft.save()
+	     		budget =  Budget(name='Budget ',accOwner=faft)
+	     		
+	     		budget.save()
 	     		saveInSession(request, 'currentAccFina', faft)
 	
 		else:	
@@ -294,3 +297,72 @@ def processAllianceRequest(request):
 		a.estado = 'Rota'
 	a.save()
 	return HttpResponse('/')
+
+def viewBudget(request):
+	return render(request,'accBudget.html')
+
+def createBudget(request):
+	isLoged(request)
+	accFina = team.financialacc_set.all()
+	
+	currentAccFinaName = request.GET.get('search','')
+	if not currentAccFinaName:
+		return HttpResponseRedirect('/homeview/')
+	
+	for acc in accFina:
+		if acc.name == currentAccFinaName.strip():
+			budget =  Budget(name='Budget '.join(acc.name),hasBudget=True,teamowner= acc)
+			budget.save()
+
+	return budgetByFinantialAcc(request)
+
+
+def budgetByFinantialAcc(request):
+	isLoged(request)
+	team = getSavedInSession(request, 'team')
+	accFina = team.financialacc_set.all()
+	
+	currentAccFinaName = request.GET.get('search','')
+	if not currentAccFinaName:
+		return HttpResponseRedirect('/homeview/')
+	
+	for acc in accFina:
+		if acc.name == currentAccFinaName.strip():
+			saveInSession(request, 'currentAccFinaForBudget', acc)
+
+	currentAccFina = getSavedInSession(request, 'currentAccFinaForBudget')
+	trxs = None
+	if currentAccFina.budget_set.all():
+		trxs = 	currentAccFina.budget_set.all()[0].transactionbudget_set.all()
+	balance = 0
+	if not trxs is None:
+		for t in trxs:
+			balance += t.amount
+			
+	return render(request,'accBudget.html',{'user':getLogin(request),'currentAccFina':currentAccFinaName,'transBudget':trxs,'balance':balance})
+
+def createBudgetTranx(request):
+	isLoged(request)
+	acc = getCurrentAccount(request)
+	currentAccFina = getSavedInSession(request, 'currentAccFina')
+	team = getSavedInSession(request, 'team')
+	accFina = team.financialacc_set.all()
+	
+	if request.method == 'POST':
+		trx = TransactionBudgetForm(request.POST)
+		if trx.is_valid():
+			typeTrx = request.POST.get('transTypeParam' , '')
+			trxt = trx.save(commit = False)
+			trxt.creator = acc
+			trxt.budgetTrans =  currentAccFina.budget_set.all()[0]
+			if typeTrx == 'isSpending':
+				trxt.amount = trxt.amount * -1
+			
+			trxt.save()
+	trxs = 	currentAccFina.budget_set.all()[0].transactionbudget_set.all()
+	
+	balance = 0 
+	for t in trxs:
+		balance += t.amount
+		
+	return render(request,'accBudget.html',{'user':getLogin(request),'currentAccFina':currentAccFina.name,'transBudget':trxs,'balance':balance})

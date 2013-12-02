@@ -59,8 +59,13 @@ function closePopover(){
 
 function isNumberKey(evt){
     var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)){
+    	//add two exceptions
+    	if(charCode == 44 || charCode == 46){
+    		return true;
+    	}
+    	return false;
+    }
     return true;
 }
 

@@ -1,5 +1,5 @@
 from django import forms
-from models import Cuenta,FinancialAcc,Transaction
+from models import Cuenta,FinancialAcc,Transaction,TransactionBudget
 from django.forms import ModelForm
 
 class CuentaForm(ModelForm):
@@ -13,3 +13,7 @@ class FinancialAccForm(ModelForm):
 class TransactionForm(ModelForm):
 	class Meta:
 		model = Transaction
+
+class TransactionBudgetForm(ModelForm):
+	class Meta:
+		model = TransactionBudget
