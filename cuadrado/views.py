@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse ,HttpResponseRedirect
 from forms import CuentaForm,FinancialAccForm,TransactionForm, TransactionBudgetForm
-from models import Cuenta,Equipo,Alianza,FinancialAcc,Transaction , Budget
+from models import Cuenta,Equipo,Alianza,FinancialAcc,Transaction , Budget,TransactionBudget
 from django.core import serializers
 from django.db.models import Q
 from django.db import IntegrityError
@@ -176,9 +176,21 @@ def serchNameGroup(request):
 	for v in data:
 		if v['nombre']:
 			result = result + ''+ v['nombre']+','
-	
 	return HttpResponse(result)
 
+def serchBudgetTranx(request):
+	isLoged(request)
+	result = ''
+	currentAccFina = getSavedInSession(request, 'currentAccFina')
+	budgetlist = currentAccFina.budget_set.all()
+	data = []
+	if budgetlist:
+		data=budgetlist[0].transactionbudget_set.values('concept').distinct()
+		
+	for v in data:
+		if v['concept']:
+			result = result + ''+ v['concept']+','
+	return HttpResponse(result)
 
 def logout(request):
 	request.session.flush()
@@ -275,8 +287,16 @@ def createFinancialTranx(request):
 			if typeTrx == 'isSpending':
 				trxt.amount = trxt.amount * -1
 			
-			
 			trxt.save()
+			budgetlist = currentAccFina.budget_set.all()
+			data = []
+			if budgetlist:
+				data=budgetlist[0].transactionbudget_set.filter(concept= trxt.concept)
+				if data:
+					if (trxt.amount >= data[0].amount and trxt.amount>=0) or(trxt.amount <= data[0].amount and trxt.amount<0):
+						data[0].isDone = True
+						data[0].save()
+					 
 	trxs = 	currentAccFina.transaction_set.all()
 	
 	balance = 0 

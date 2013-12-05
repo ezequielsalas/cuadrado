@@ -76,6 +76,7 @@ class TransactionBudget(models.Model):
 	creator = models.ForeignKey(Cuenta,blank=True, null=True)
 	budgetTrans = models.ForeignKey(Budget,blank=True, null=True)
 	effectiveDate = models.DateField()
+	isDone = models.BooleanField(default=False)
 	#TODO: status attribute
 	def __unicode__(self):
 		return self.concept	

@@ -14,7 +14,11 @@
     	{% if transBudget %}
     		<tr><th><b>Fecha de efectividad</b></th><th><b>Concepto</b></th><th><b>Monto</b></th><th></th></tr>
     		{% for t in transBudget%}
-    		<tr><td>{{t.effectiveDate}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td><td><a href='#' onclick="alert('No autorizado')"><i class='icon-remove'></i></a></td></tr>
+    		<tr 
+    		{%if t.isDone %}
+    		style='text-decoration:line-through;'
+    		{%endif%}
+    		><td>{{t.effectiveDate}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td><td><a href='#' onclick="alert('No autorizado')"><i class='icon-remove'></i></a></td></tr>
     		{% endfor %}
     	{% else %}
     	<tr><td><b>Sin transacciones</b></td></tr>

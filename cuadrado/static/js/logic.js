@@ -10,18 +10,22 @@ function (query, process) {
 }
 */
 function loadSearchGroupNames(){
-	var colors = ["red", "blue", "green", "yellow", "brown", "black"];
-	
 	$.get('/typeaheadGroup/', {}, function (data) {
-       
 		available = data.split(',');
-		
 		$('#serchGroupField').typeahead({
 			  source:available
 			});
     });
-	  
 }
+function loadBudgetTranx(){
+	$.get('/typeaheadBudget/', {}, function (data) {
+		available = data.split(',');
+		$('#conceptoTransaccion').typeahead({
+			  source:available
+			});
+    });
+}
+
 
 $(document).ready(function() {
 	$(function () {
@@ -39,6 +43,7 @@ $(document).ready(function() {
 	
 	hideFinancialConfig();
 	loadSearchGroupNames();
+	loadBudgetTranx();
 	});
 
 function hideFinancialConfig(){
