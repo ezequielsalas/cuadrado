@@ -4,19 +4,22 @@
   <div id="contBodyHome" class="container">
 <div >
  {%if msj %}
-                        <div class="alert alert-error">
+                        <div class="alert alert-danger">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                         {{msj}}
                         </div>
                       {%endif%}
                         
-
+  <div class="row">
+    	<div class="col-xs-4">
     <form method='post' action='/creategroup/'>
         {% csrf_token %}
     <fieldset>
     <legend>Armar un equipo</legend>
     <label>Grupo</label>
-    <input type="text" name='equipoparam' required="" placeholder="Mi equipo">
+  
+    <input type="text" name='equipoparam' class="form-control" required="" placeholder="Mi equipo">
+   
     <span class="help-block">Seleccione sus intereses</span>
     <label class="checkbox">
     <input type="checkbox" checked name='finanzaparam' disabled="disabled"> Finanzas
@@ -32,10 +35,11 @@
     <input type="checkbox" disabled="disabled"> Alianzas
     </label>
 
-    <button type="submit" class="btn">Crear equipo</button>
+    <button type="submit" class="btn btn-primary">Crear equipo</button>
     </fieldset>
     </form>
 </div>
-
+ </div>
+  </div >
   </div >
 {% endblock %}

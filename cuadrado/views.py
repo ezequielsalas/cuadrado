@@ -5,6 +5,7 @@ from models import Cuenta,Equipo,Alianza,FinancialAcc,Transaction , Budget,Trans
 from django.core import serializers
 from django.db.models import Q
 from django.db import IntegrityError
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 def validateSignin(usuario, email, password,repassword):
 	result = True
@@ -119,6 +120,7 @@ def viewsearchgroup(request):
 def searchgroup(request):
 	isLoged(request)
 	teamName = request.GET.get('searchGroup','')
+	page = request.GET.get('page','1')
 	user = getLogin(request)
 	
 	teams = Alianza.objects.filter(equipo__nombre__icontains=teamName.strip(),estado__isnull=True).exclude(equipo__propietario=user)
@@ -131,7 +133,7 @@ def searchgroup(request):
 		else:
 			currentTeams.append(team)
 			
-	return render(request,'searchgroup.html',{'user':user,'teams':currentTeams})
+	return render(request,'searchgroup.html',{'teamName':teamName,'user':user,'teams':Paginator(currentTeams,10).page(int(page))})
 
 #Cambiar esto de get a post
 def requestAlliance(request):
@@ -257,6 +259,7 @@ def financialAccByName(request):
 	accFina = team.financialacc_set.all()
 	
 	currentAccFinaName = request.GET.get('search','')
+	page = request.GET.get('page','1')
 	if not currentAccFinaName:
 		return HttpResponseRedirect('/homeview/')
 	
@@ -264,9 +267,9 @@ def financialAccByName(request):
 		if acc.name == currentAccFinaName.strip():
 			saveInSession(request, 'currentAccFina', acc)
 	currentAccFina = getSavedInSession(request, 'currentAccFina')		
-	trxs = 	currentAccFina.transaction_set.all()
+	trxs = 	Paginator(currentAccFina.transaction_set.all(),5).page(int(page))
 	balance = 0 
-	for t in trxs:
+	for t in currentAccFina.transaction_set.all():
 		balance += t.amount
 	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':currentAccFinaName,'trans':trxs,'balance':balance})
 
@@ -343,6 +346,7 @@ def budgetByFinantialAcc(request):
 	accFina = team.financialacc_set.all()
 	
 	currentAccFinaName = request.GET.get('search','')
+	page = request.GET.get('page','1')
 	if not currentAccFinaName:
 		return HttpResponseRedirect('/homeview/')
 	
@@ -353,10 +357,10 @@ def budgetByFinantialAcc(request):
 	currentAccFina = getSavedInSession(request, 'currentAccFinaForBudget')
 	trxs = None
 	if currentAccFina.budget_set.all():
-		trxs = 	currentAccFina.budget_set.all()[0].transactionbudget_set.all()
+		trxs = 	Paginator(currentAccFina.budget_set.all()[0].transactionbudget_set.all(),5).page(int(page))
 	balance = 0
 	if not trxs is None:
-		for t in trxs:
+		for t in currentAccFina.budget_set.all()[0].transactionbudget_set.all():
 			balance += t.amount
 			
 	return render(request,'accBudget.html',{'user':getLogin(request),'currentAccFina':currentAccFinaName,'transBudget':trxs,'balance':balance})
@@ -386,3 +390,13 @@ def createBudgetTranx(request):
 		balance += t.amount
 		
 	return render(request,'accBudget.html',{'user':getLogin(request),'currentAccFina':currentAccFina.name,'transBudget':trxs,'balance':balance})
+
+def removeBudgetTrx(request):
+	pid = request.GET.get('keyBudget','000000')
+	budget = TransactionBudget(id=int(pid))
+	res = 'NOK'
+	if budget:
+		budget.delete()
+		res = 'OK'
+		
+	return HttpResponse(res)

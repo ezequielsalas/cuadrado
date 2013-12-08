@@ -1,145 +1,132 @@
 {% extends "base.html" %}
 
 {% block customenu %}
-  <ul class="nav pull-right">
-                <li class="dropdown pull-right">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Gestion Financiera<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-          
-                               <li><a href="#" onclick="alert('Area no autorizada');">Presupuesto</a></li>
-                  <li class="divider"></li>
-                <li><a href="#" onclick="alert('Area no autorizada');">Reportes</a></li>
-                </ul>
-              </li>
+<ul class="nav navbar-nav pull-right">
+	<li class="dropdown pull-right">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Gestion Financiera<b class="caret"></b></a>
+		<ul class="dropdown-menu">
+
+	
+			<li>
+				<a href="#" onclick="alert('Area no autorizada');">Reportes</a>
+			</li>
+		</ul>
+	</li>
 </ul>
 {% endblock %}
 
-
 {% block contmain %}
 <br/>
-<div class="container-fluid">
-	<div class="row-fluid">
-		
-		<div class="span3">
+<div class="container">
+	<div class="row">
 
-			<div class="well sidebar-nav">
-				<ul class="nav nav-list">
-					<li class="nav-header">
-						Cartera de cuentas
-					</li>
-				{% if accFina %}
-					{%for acc in accFina%}
-					<li>
-						<a href="/homefinancialTrans/?search={{acc.name}}" ><i class='icon-edit'></i>{{acc.name}}</a> 
-						<ul>
-							<li>
-								<a href='/budgetfinancialTrans/?search={{acc.name}}' ><i class="icon-book"></i> Presupuesto</a>
-							</li>
-						</ul>
-					</li>
+		<div class="col-md-3">
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"> Cartera de cuentas </h3>
+				</div>
+				<div class="panel-body">
+					<ul class="nav nav-pills nav-stacked">
+						{% if accFina %}
+						{%for acc in accFina%}
+						<li >
+							<a  href="/homefinancialTrans/?search={{acc.name}}" ><i class='glyphicon glyphicon-edit'></i>{{acc.name}}</a>
+							
+						</li>
 						{% endfor %}
-				{% else %}	
-					<li>
-						<h5>No hay cuentas</h5>
-					</li>
-				{% endif %}	
-					<li>
-						<a href="#myModal"   id='showAccFinForm' data-original-title="Cuenta"><i class='icon-cog'></i>Agregar cuenta</a>
-					</li>
-					
-				</ul>
-	
-	
-	
-	
-<div id="popover_content_wrapper" style="display: none">
-  <form id="mainForm"  method="post" action="/createfinancialAcc/" >
-<!-- Text input-->
-    {% csrf_token %}
-<div class="control-group">
-  <label class="control-label" for="nameAccFin">Nombre de la cuenta</label>
-  <div class="controls">
-    <input id="nameAccFin" name="name" placeholder="Ejem: Gastos del hogar" class="input-medium" required="" type="text">
-    
-  </div>
-</div>
+						{% else %}
+						<li  >
+							<h5>No hay cuentas</h5>
+						</li>
+						{% endif %}
+						<hr />
+						<li class="active">
+							<a href="#myModal" id='showAccFinForm' data-original-title="Cuenta"><i class='glyphicon glyphicon-cog'></i>Agregar cuenta</a>
+						</li>
 
-<!-- Multiple Radios -->
-<div class="control-group">
-  <label class="control-label" for="radios">Tipo de cuenta</label>
-  <div class="controls">
-    <label class="radio" for="radios-0">
-      <input name="radios" id="radios-0" value="Debito" checked="checked"   onchange="hideFinancialConfig()" type="radio">
-      Debito
-    </label>
-    <label class="radio" for="radios-1">
-      <input name="radios"  onchange="showFinancialConfig()" id="radios-1" value="Credito" type="radio">
-      Credito
-    </label>
-  </div>
-</div>
-<div id='creditContainer'>
-<!-- Appended Input-->
-<div class="control-group">
-  <label class="control-label" for="porcenttext">Aumenta un</label>
-  <div class="controls">
-    <div class="input-append">
-      <input id="porcenttext" name="porcent" class="input-mini" placeholder="Ejem: 10" type="number" min="0" onkeypress="return isNumberKey(event)" >
-      <span class="add-on">% Mes</span>
-    </div>
-    
-  </div>
-</div>
-<div>
-<h4>Ó</h4>
-</div>
-<!-- Appended Input-->
-<div class="control-group">
-  <label class="control-label" for="cuotastext">A pagar en</label>
-  <div class="controls">
-    <div class="input-append">
-      <input id="cuotastext" name="fee" class="input-mini" placeholder="Ejem: 5" type="number" min="0" onkeypress="return isNumberKey(event)" >
-      <span class="add-on">Cuotas</span>
-    </div>
-    
-  </div>
-</div>
-</div>
-<!-- Button (Double) -->
-<div class="control-group">
-  <label class="control-label" for="button1id"></label>
-  <div class="controls">
-     <span class="btn-group"><button id="button1id" name="button1id" class="btn btn-success"><i class="icon-white icon-ok"></i>Crear una</button>
-    <a href="#" class="btn btn-danger" onclick='closePopover()'><i class="icon-white icon-remove"></i>Cancelar</a></span>
-  </div>
-</div>
-
-
-</form>
-</div>
+					</ul>
+				</div>
 			</div>
-			<!--/.well -->
-			<br />
+
+			<div id="popover_content_wrapper" style="display: none" >
+				<form id="mainForm"  method="post" action="/createfinancialAcc/" >
+					<!-- Text input-->
+					{% csrf_token %}
+					<div class="form-group" style="width: 200px;">
+						<label class="control-label" for="nameAccFin">Nombre de la cuenta</label>
+							<input  class="form-control"   id="nameAccFin" name="name" placeholder="Ejem: Gastos del hogar"  required="" type="text">
+
+					</div>
+
+					<!-- Multiple Radios -->
+					<!-- 
+					<div class="form-group">
+						<label class="control-label" for="radios">Tipo de cuenta</label>
+						<div class="controls">
+							<label class="radio" for="radios-0">
+								<input name="radios" id="radios-0" value="Debito" checked="checked"   onchange="hideFinancialConfig()" type="radio">
+								Debito </label>
+							<label class="radio" for="radios-1">
+								<input name="radios"  onchange="showFinancialConfig()" id="radios-1" value="Credito" type="radio">
+								Credito </label>
+						</div>
+					</div> -->					<div id='creditContainer'>
+						<!-- Appended Input-->
+						<div class="form-group">
+							<label class="control-label" for="porcenttext">Aumenta un</label>
+							<div class="controls">
+								<div class="input-append">
+									<input id="porcenttext" name="porcent" class="input-mini" placeholder="Ejem: 10" type="number" min="0" onkeypress="return isNumberKey(event)" >
+									<span class="add-on">% Mes</span>
+								</div>
+
+							</div>
+						</div>
+						<div>
+							<h4>Ó</h4>
+						</div>
+						<!-- Appended Input-->
+						<div class="form-group">
+							<label class="control-label" for="cuotastext">A pagar en</label>
+							<div class="controls">
+								<div class="input-append">
+									<input id="cuotastext" name="fee" class="input-mini" placeholder="Ejem: 5" type="number" min="0" onkeypress="return isNumberKey(event)" >
+									<span class="add-on">Cuotas</span>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- Button (Double) -->
+					<div class="form-group">
+						<label class="control-label" for="button1id"></label>
+						<div class="controls">
+							<span class="btn-group">
+								<button id="button1id" name="button1id" class="btn btn-success">
+									<i class="glyphicon .glyphicon-white glyphicon .glyphicon-ok"></i>Crear una
+								</button> <a href="#" class="btn btn-danger" onclick='closePopover()'><i class="glyphicon .glyphicon-white glyphicon .glyphicon-remove"></i>Cancelar</a></span>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		<!--/.well -->
 		<br />
-		
+		<br />
 
-		</div>
+	</div>
 
-<div class="span6">
-			{% block financialBody%}
-				
-				
-				
-			{% endblock%}
+	<div class="col-md-6">
+		{% block financialBody%}
+
+		{% endblock%}
 	</div>
-	
-	<div class="span3">
-			{% block financialRight %}
-				
-				
-				
-			{% endblock%}
-	</div>
+
+	<div class="col-md-3">
+		{% block financialRight %}
+
+		{% endblock%}
 	</div>
 </div>
 {% endblock %}

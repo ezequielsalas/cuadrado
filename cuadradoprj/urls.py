@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^getMeGroupMessage/', 'cuadrado.views.getMeGroupMessage'),
     url(r'^procedAllianceRequest/', 'cuadrado.views.processAllianceRequest'),
     url(r'^budgetview/', 'cuadrado.views.viewBudget'),
+    url(r'^disableBudgetTrx/', 'cuadrado.views.removeBudgetTrx'),
     url(r'^createfinancialTranBudget/', 'cuadrado.views.createBudgetTranx'),
     # url(r'^cuadradoprj/', include('cuadradoprj.foo.urls')),
 

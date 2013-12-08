@@ -1,44 +1,51 @@
 {% extends "base.html" %}
 
 {% block contmain %}
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span3">
-      <div class="well sidebar-nav">
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      
         
-        <ul class="nav nav-list">
+     
           {% for g in grupos %}
-          <li class="nav-header">{{g.equipo.nombre}}</li> 
-
-          
+ 
+            <div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"> {{g.equipo.nombre}}</h3>
+		  </div>
+   <div class="panel-body">
           {%if g.equipo.interesFinanciero%}
-          <li ><a href="/financialview/?search={{g.equipo.nombre}}">Finanzas</a></li>
+          	<a href="/financialview/?search={{g.equipo.nombre}}">Finanzas</a>
           {% endif %}
 
           {%if g.equipo.interesConocimiento%}
-          <li ><a href="#">Conocimiento</a></li>
+         	<a href="#">Conocimiento</a>
           {% endif %}
 
           {%if g.equipo.interesCultura%}
-          <li ><a href="#">Cultura</a></li>
+       		 <a href="#">Cultura</a>
           {% endif %}
 
           {%if g.equipo.interesAlianza%}
-          <li ><a href="#">Alianzas</a></li>
+     		<a href="#">Alianzas</a>
           {% endif %}
-
+ 		 </div>
+ 		 </div>
           {% endfor %}
-        </ul>
-      </div><!--/.well -->
+    
+       
+
+
     </div><!--/span-->
-    <div class="span9">
-      <div class="hero-unit">
-        <h1>Bienvenido!</h1>
-        <p>Este es el panel central de Dhene. Para iniciar, ve al panel de la izquierda y pulsa en algun interes del grupo al cual perteneces o selecciona Iniciar ahora y Dhene entrera al interes principal de tu grupo</p>
-        <p><a href="/financialview/?search={{grupos.0.equipo.nombre}}" class="btn btn-primary btn-large">Iniciar ahora &raquo;</a></p>
-      </div>
+    <div class="col-md-9">
+	      <div class="jumbotron">
+	        <h1>Bienvenido!</h1>
+	        <p>Este es el panel central de Dhene. Para iniciar, ve al panel de la izquierda y pulsa en algun interes del grupo al cual perteneces o selecciona Iniciar ahora y Dhene entrera al interes principal de tu grupo</p>
+	        <p><a href="/financialview/?search={{grupos.0.equipo.nombre}}" class="btn btn-primary btn-large">Iniciar ahora &raquo;</a></p>
+	      </div>
      
-  
-    </div><!--/span-->
-  </div><!--/row-->
+	 </div><!--/span-->
+	 
+	  </div><!--/row-->
+ </div>
 {% endblock %}

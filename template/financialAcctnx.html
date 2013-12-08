@@ -1,87 +1,103 @@
 {% extends "financialInterest.html" %}
 
-
 {% block financialBody %}
 
- 
-    <fieldset>
-    <legend>Trabajando con <strong>{{currentAccFina}}</strong></legend>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title"> Trabajando con <strong>{{currentAccFina}}</strong><a class="pull-right" href='/budgetfinancialTrans/?search={{currentAccFina}}' ><i class="glyphicon glyphicon-book"></i> ir al presupuesto</a></h3>
+	</div>
+	<div class="panel-body">
 
-	 <table class="table table-condensed">
-    	{% if trans %}
-    		<tr><th><b>Fecha</b></th><th><b>Concepto</b></th><th><b>Monto</b></th></tr>
-    		{% for t in trans%}
-    		<tr><td>{{t.created}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td></tr>
-    		{% endfor %}
-    	{% else %}
-    	<tr><td><b>Sin transacciones</b></td></tr>
-    	{% endif%}
-    
-    </table>
+		<table class="table table-condensed">
+			{% if trans %}
+			<tr>
+				<th><b>Fecha</b></th><th><b>Concepto</b></th><th><b>Monto</b></th>
+			</tr>
+			{% for t in trans%}
+			<tr>
+				<td>{{t.created}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td>
+			</tr>
+			{% endfor %}
+			{% else %}
+			<tr>
+				<td><b>Sin transacciones</b></td>
+			</tr>
+			{% endif%}
 
-    </fieldset>
-   
-    
+		</table>
+		<div class="pager">
+			{% if trans.has_previous %}
+			<li>
+				<a href="?page={{ trans.previous_page_number }}&search={{currentAccFina}}">atras</a>
+			</li>
+			{% endif %}
 
+			<span class="current"> Page {{ trans.number }} de {{ trans.paginator.num_pages }}. </span>
+
+			{% if trans.has_next %}
+			<li>
+				<a href="?page={{ trans.next_page_number }}&search={{currentAccFina}}">siguiente</a>
+			</li>
+			{% endif %}
+		</div>
+	</div>
+</div>
 
 {% endblock %}
 
 {% block financialRight %}
 
 <form  method="post" action="/createfinancialTran/">
-     {% csrf_token %}
+	{% csrf_token %}
 
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h3 class="panel-title">Registro de transaccion </h3>
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="control-label" for="conceptoTransaccion">Concepto</label>
+				<input class="form-control" id="conceptoTransaccion" autocomplete="off"  data-provide="typeahead" name="concept" placeholder="Dos taquillas de cine..." required="" class="input-large" type="text">
 
-<!-- Form Name 809-439-3421-->
-<legend>Registro de transaccion</legend>
+			</div>
 
-<!-- Text input-->
-<div class="control-group">
-  <label class="control-label" for="conceptoTransaccion">Concepto</label>
-  <div class="controls">
-    <input id="conceptoTransaccion" autocomplete="off"  data-provide="typeahead" name="concept" placeholder="Dos taquillas de cine..." required="" class="input-large" type="text">
-    
-  </div>
-</div>
+			<!-- Prepended text-->
+			<div class="form-group">
+				<label class="control-label" for="montoTransaction">Monto $</label>
 
-<!-- Prepended text-->
-<div class="control-group">
-  <label class="control-label" for="montoTransaction">Monto $</label>
-  <div class="controls">
+				<input class="form-control"  id="montoTransaction" name="amount" class="input-small" placeholder="500.00" required="" type="number"   step="0.01" onkeypress="return isNumberKey(event)" >
 
-      <input id="montoTransaction" name="amount" class="input-small" placeholder="500.00" required="" type="number"   step="0.01" onkeypress="return isNumberKey(event)" >
-    
-  </div>
-</div>
-<input type='hidden' id='transType' name='transTypeParam' />
-<!-- Button (Double) -->
-<div class="control-group">
-  <label class="control-label" for="buttonIngresoid">Tipo</label>
-  <div class="controls">
-    <button id="buttonIngresoid" name="buttonIngresoid" class="btn btn-success" onClick='isDeposit()'>Ingreso $</button>
-    <button id="buttonGastoid" name="buttonGastoid" class="btn btn-danger" onClick='isSpending()'>Gasto    $</button>
-  </div>
-</div>
-
+			</div>
+			<input type='hidden' id='transType' name='transTypeParam' />
+			<!-- Button (Double) -->
+			<div class="form-group">
+				<label class="control-label" for="buttonIngresoid">Tipo</label>
+				<div class="controls">
+					<button id="buttonIngresoid" name="buttonIngresoid" class="btn btn-success" onClick='isDeposit()'>
+						Ingreso $
+					</button>
+					<button id="buttonGastoid" name="buttonGastoid" class="pull-right btn btn-danger" onClick='isSpending()'>
+						Gasto    $
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </form>
 
-<div class="control-group ">
- <hr/>
-  <b><label class="control-label" for="conceptoTransaccion">Balance de la cuenta</label></b>
-  <div class="controls">
-  <label class="control-label" >
-   <strong>
-   	$
-  		{% if balance %}
-      		 {{balance}}  
-    	{% else %}
-    		0
-    	{% endif%}
-   </strong>
-    </label>
-    
-  </div>
+<div class="form-group ">
+	<hr/>
+	<b><label class="control-label" for="conceptoTransaccion">Balance de la cuenta</label></b>
+	<div class="controls">
+		<label class="control-label" > <strong> $
+			{% if balance %}
+			{{balance}}
+			{% else %}
+			0
+			{% endif%} </strong> </label>
+
+	</div>
 </div>
 
 {% endblock %}

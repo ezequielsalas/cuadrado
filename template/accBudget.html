@@ -1,105 +1,120 @@
 {% extends "base.html" %}
 
-
 {% block contmain %}
 
- <br/>
-<div class="container-fluid">
-	<div class="row-fluid">
-    <div class="span9">
-    <fieldset>
-    <legend>Presupuesto de <strong><a href="/homefinancialTrans/?search={{currentAccFina}}" >{{currentAccFina}}</a> </strong>  </legend>
+<br/>
+<div class="container">
+	<div class="row">
+		<div class="col-md-9">
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Presupuesto de <strong>{{currentAccFina}}</strong><a class="pull-right" href="/homefinancialTrans/?search={{currentAccFina}}" ><span class="glyphicon glyphicon-arrow-left"></span> volver</a></h3>
+				</div>
+				<div class="panel-body">
 
-	 <table class="table table-condensed">
-    	{% if transBudget %}
-    		<tr><th><b>Fecha de efectividad</b></th><th><b>Concepto</b></th><th><b>Monto</b></th><th></th></tr>
-    		{% for t in transBudget%}
-    		<tr 
-    		{%if t.isDone %}
-    		style='text-decoration:line-through;'
-    		{%endif%}
-    		><td>{{t.effectiveDate}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td><td><a href='#' onclick="alert('No autorizado')"><i class='icon-remove'></i></a></td></tr>
-    		{% endfor %}
-    	{% else %}
-    	<tr><td><b>Sin transacciones</b></td></tr>
-    	{% endif%}
-    
-    </table>
+					<table class="table table-condensed">
+						{% if transBudget %}
+						<tr>
+							<th><b>Fecha de efectividad</b></th><th><b>Concepto</b></th><th><b>Monto</b></th><th></th>
+						</tr>
+						{% for t in transBudget%}
+						<tr id="trx-tr-{{t.id}}"
+						{%if t.isDone %}
+						style='text-decoration:line-through;'
+						{%endif%}
+						>
+							<td>{{t.effectiveDate}}</td><td>{{t.concept}}</td><td>{{t.amount}}</td><td><a href='#' onclick="disableBudgetTrx({{t.id}})"><i class='glyphicon glyphicon-remove'></i></a></td>
+						</tr>
+						{% endfor %}
+						{% else %}
+						<tr>
+							<td><b>Sin transacciones</b></td>
+						</tr>
+						{% endif%}
 
-    </fieldset>
-   
-    </div>
+					</table>
+					<div class="pager">
+						{% if transBudget.has_previous %}
+						<li>
+							<a href="?page={{ transBudget.previous_page_number }}&search={{currentAccFina}}">atras</a>
+						</li>
+						{% endif %}
 
+						<span class="current"> Page {{ transBudget.number }} de {{ transBudget.paginator.num_pages }}. </span>
 
+						{% if transBudget.has_next %}
+						<li>
+							<a href="?page={{ transBudget.next_page_number }}&search={{currentAccFina}}">siguiente</a>
+						</li>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 
+		</div>
 
-	<div class="span3">
-<form  method="post" action="/createfinancialTranBudget/">
-     {% csrf_token %}
+		<div class="col-md-3">
+			<form  method="post" action="/createfinancialTranBudget/">
+				{% csrf_token %}
 
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+						<h3 class="panel-title">Registro de transaccion</h3>
+					</div>
+					<div class="panel-body">
 
-<legend>Registro de transaccion</legend>
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="control-label" for="conceptoTransaccion">Concepto</label>
+							<input class="form-control" id="conceptoTransaccion" name="concept" placeholder="Salario del mes..." required="" class="input-large" type="text">
 
-<!-- Text input-->
-<div class="control-group">
-  <label class="control-label" for="conceptoTransaccion">Concepto</label>
-  <div class="controls">
-    <input id="conceptoTransaccion" name="concept" placeholder="Salario del mes..." required="" class="input-large" type="text">
-    
-  </div>
-</div>
+						</div>
 
-<!-- Prepended text-->
-<div class="control-group">
-  <label class="control-label" for="montoTransaction">Monto</label>
-  <div class="controls">
-    <div class="input-prepend">
-      <span class="add-on">$</span>
-      <input id="montoTransaction" name="amount" class="input-small" placeholder="10,000.00" required="" type="number" step="0.01" min="0" onkeypress="return isNumberKey(event)">
-    </div>
-    
-  </div>
-</div>
-<!-- Text input-->
-<div class="control-group">
-  <label class="control-label" for="conceptoTransaccion">Fecha efectiva</label>
-  <div class="controls">
-    <input id="conceptoTransaccion" name="effectiveDate" placeholder="dd/mm/yyyy" required="" class="input-large" type="date" pattern="\d{1,2}/\d{1,2}/\d{4}">
-    
-  </div>
-</div>
+						<!-- Prepended text-->
+						<div class="form-group">
+							<label class="control-label" for="montoTransaction">Monto$</label>
+							<input class="form-control" id="montoTransaction" name="amount" class="input-small" placeholder="10,000.00" required="" type="number" step="0.01" min="0" onkeypress="return isNumberKey(event)">
 
-<input type='hidden' id='transType' name='transTypeParam' />
-<!-- Button (Double) -->
-<div class="control-group">
-  <label class="control-label" for="buttonIngresoid">Tipo</label>
-  <div class="controls">
-    <button id="buttonIngresoid" name="buttonIngresoid" class="btn btn-success" onClick='isDeposit()'>Ingreso $</button>
-    <button id="buttonGastoid" name="buttonGastoid" class="btn btn-danger" onClick='isSpending()'>Gasto    $</button>
-  </div>
-</div>
+						</div>
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="control-label" for="conceptoTransaccion">Fecha efectiva</label>
+							<input class="form-control" id="conceptoTransaccion" name="effectiveDate" placeholder="dd/mm/yyyy" required="" class="input-large" type="date" pattern="\d{1,2}/\d{1,2}/\d{4}">
 
+						</div>
 
-</form>
+						<input type='hidden' id='transType' name='transTypeParam' />
+						<!-- Button (Double) -->
+						<div class="form-group">
+							<label class="control-label" for="buttonIngresoid">Tipo</label>
+							<div class="controls">
+								<button id="buttonIngresoid" name="buttonIngresoid" class="btn btn-success" onClick='isDeposit()'>
+									Ingreso $
+								</button>
+								<button id="buttonGastoid" name="buttonGastoid" class="pull-right btn btn-danger" onClick='isSpending()'>
+									Gasto    $
+								</button>
+							</div>
+						</div>
 
-<div class="control-group ">
- <hr/>
-  <b><label class="control-label" for="conceptoTransaccion">Balance de la cuenta</label></b>
-  <div class="controls">
-  <label class="control-label" >
-   <strong>
-   	$
-  		{% if balance %}
-      		 {{balance}}  
-    	{% else %}
-    		0
-    	{% endif%}
-   </strong>
-    </label>
-    
-  </div>
-</div>
-</div>
-</div>
+					</div>
+				</div>
+			</form>
+
+			<div class="form-group ">
+				<hr/>
+				<b><label class="control-label" for="conceptoTransaccion">Balance de la cuenta</label></b>
+				<div class="controls">
+					<label class="control-label" > <strong> $
+						{% if balance %}
+						{{balance}}
+						{% else %}
+						0
+						{% endif%} </strong> </label>
+
+				</div>
+			</div>
+		</div>
 	</div>
+</div>
 {% endblock %}
