@@ -279,6 +279,8 @@ def createFinancialTranx(request):
 	currentAccFina = getSavedInSession(request, 'currentAccFina')
 	team = getSavedInSession(request, 'team')
 	accFina = team.financialacc_set.all()
+	page = request.GET.get('page','1')
+	msj = ''
 	
 	if request.method == 'POST':
 		trx = TransactionForm(request.POST)
@@ -296,17 +298,29 @@ def createFinancialTranx(request):
 			if budgetlist:
 				data=budgetlist[0].transactionbudget_set.filter(concept= trxt.concept)
 				if data:
-					if (trxt.amount >= data[0].amount and trxt.amount>=0) or(trxt.amount <= data[0].amount and trxt.amount<0):
+					
+					newAmount = abs(data[0].amount) - abs(trxt.amount)
+					
+					if trxt.amount >=0 and data[0].amount<0:
+						msj = "El presupuesto asumira este ingreso como un gasto por usar su mismo concepto."
+					if (newAmount<=0):
 						data[0].isDone = True
 						data[0].save()
+					else:
+						if(data[0].amount < 0):
+							data[0].amount = newAmount * -1
+						else:
+							data[0].amount = newAmount
+						
+						data[0].save()
 					 
-	trxs = 	currentAccFina.transaction_set.all()
+	trxs = 	Paginator(currentAccFina.transaction_set.all(),5).page(int(page))
 	
 	balance = 0 
 	for t in trxs:
 		balance += t.amount
 		
-	return render(request,'financialAcctnx.html',{'user':getLogin(request),'accFina':accFina,'currentAccFina':currentAccFina.name,'trans':trxs,'balance':balance})
+	return render(request,'financialAcctnx.html',{'msjInfo':msj ,'user':getLogin(request),'accFina':accFina,'currentAccFina':currentAccFina.name,'trans':trxs,'balance':balance})
 
 def processAllianceRequest(request):
 	isLoged(request)
@@ -371,6 +385,7 @@ def createBudgetTranx(request):
 	currentAccFina = getSavedInSession(request, 'currentAccFina')
 	team = getSavedInSession(request, 'team')
 	accFina = team.financialacc_set.all()
+	page = request.GET.get('page','1')
 	
 	if request.method == 'POST':
 		trx = TransactionBudgetForm(request.POST)
@@ -383,7 +398,7 @@ def createBudgetTranx(request):
 				trxt.amount = trxt.amount * -1
 			
 			trxt.save()
-	trxs = 	currentAccFina.budget_set.all()[0].transactionbudget_set.all()
+	trxs = 	Paginator(currentAccFina.budget_set.all()[0].transactionbudget_set.all(),5).page(int(page))
 	
 	balance = 0 
 	for t in trxs:
